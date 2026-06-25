@@ -11,7 +11,7 @@
     <div class="sections">
       <section class="card">
         <h2><span class="glitch-text" data-text="IDENTITÉ">IDENTITÉ</span></h2>
-        <button type="button" class="theme-bubble" data-theme="IDENTITÉ" aria-label="Hacker l'identité" hidden aria-hidden="true"></button>
+        <button type="button" class="theme-bubble" data-theme="IDENTITÉ" aria-label="Afficher l'identité" hidden aria-hidden="true"></button>
         <div class="section-body hidden">
           <div class="bio-list">
             <div><span class="label">Prénom :</span><span class="value">Louis</span></div>
@@ -25,7 +25,7 @@
 
       <section class="card">
         <h2><span class="glitch-text" data-text="PARCOURS SCOLAIRE">PARCOURS SCOLAIRE</span></h2>
-        <button type="button" class="theme-bubble" data-theme="PARCOURS SCOLAIRE" aria-label="Hacker le parcours scolaire" hidden aria-hidden="true"></button>
+        <button type="button" class="theme-bubble" data-theme="PARCOURS SCOLAIRE" aria-label="Afficher le parcours scolaire" hidden aria-hidden="true"></button>
         <div class="section-body hidden">
           <div class="bio-list">
             <div><span class="label">École primaire :</span><span class="value">Victor-Hugo puis Pasteur à Lesquin</span></div>
@@ -37,7 +37,7 @@
 
       <section class="card">
         <h2><span class="glitch-text" data-text="GAMEPLAY">GAMEPLAY</span></h2>
-        <button type="button" class="theme-bubble" data-theme="GAMEPLAY" aria-label="Hacker le gameplay" hidden aria-hidden="true"></button>
+        <button type="button" class="theme-bubble" data-theme="GAMEPLAY" aria-label="Afficher le gameplay" hidden aria-hidden="true"></button>
         <div class="section-body hidden">
           <div class="bio-list">
             <div><span class="label">Jeux favoris :</span><span class="value">Helldivers 2, Red Dead Redemption 2 et Watch Dogs sont mes jeux préférés parce qu'ils offrent une expérience très différente ;<br>- Helldivers 2 est un MmoPvE où nous pouvons affronter plusieurs races d'ennemis différents : --automatons(robots à la terminator); --terminides(grands insectes envahissant); --illuministes(zombies venant de l'espace).<br>- Red Dead Redemption 2 est un jeu d'action-aventure qui se déroule dans un monde ouvert, offrant une narration immersive et des quêtes secondaires riches.<br>- Watch Dogs 2 est un jeu de type hack and slash qui se déroule dans une ville fictive, où le joueur peut manipuler les systèmes informatiques pour résoudre des énigmes et accomplir des missions.</span></div>
@@ -61,7 +61,7 @@
 
       <section class="card">
         <h2><span class="glitch-text" data-text="BUGS">DIVERS</span></h2>
-        <button type="button" class="theme-bubble" data-theme="DIVERS" aria-label="Hacker la section divers" hidden aria-hidden="true"></button>
+        <button type="button" class="theme-bubble" data-theme="DIVERS" aria-label="Afficher la section divers" hidden aria-hidden="true"></button>
         <div class="section-body hidden">
           <div class="bio-list">
             <div><span class="label">Sport :</span><span class="value">Le tennis est un sport collectif et solitaire ce qui me convient parfaitement car j'aime bien jouer de tant en temps en solo et en duo.</span></div>
@@ -79,7 +79,7 @@
 
       <section class="card stage-card">
         <h2><span class="glitch-text" data-text="STAGE">STAGE</span></h2>
-        <button type="button" class="theme-bubble" data-theme="STAGE" aria-label="Hacker la section stage" hidden aria-hidden="true"></button>
+        <button type="button" class="theme-bubble" data-theme="STAGE" aria-label="Afficher la section stage" hidden aria-hidden="true"></button>
         <div class="section-body hidden">
           <div class="stage-grid">
             <div class="stage-part stage-week-1">
@@ -123,28 +123,18 @@
     </div>
   </div>
 
-  <div class="hacker-window" id="hacker-window" aria-hidden="true">
-    <div class="hacker-window__backdrop"></div>
-    <div class="hacker-window__content">
-      <button type="button" class="close-window" aria-label="Fermer la fenêtre">×</button>
-      <div class="window-title"><span class="glitch-text" data-text="CORRUPTION">CORRUPTION</span></div>
-      <pre class="code-output" aria-live="polite"></pre>
-    </div>
-  </div>
-
   <script>
     let liked = false;
     const boutonLike = document.getElementById("mon-bouton-like");
-    const hackerWindow = document.getElementById("hacker-window");
-    const codeOutput = hackerWindow.querySelector(".code-output");
-    const closeWindow = hackerWindow.querySelector(".close-window");
     const themeButtons = Array.from(document.querySelectorAll(".theme-bubble"));
 
     function openThemeBubble(themeName) {
       const button = themeButtons.find((btn) => btn.dataset.theme === themeName);
       if (!button) return;
       const sectionBody = button.closest("section").querySelector(".section-body");
-      openHackerWindow(themeName, sectionBody);
+      if (sectionBody) {
+        sectionBody.classList.remove("hidden");
+      }
     }
 
     themeButtons.forEach((button) => {
@@ -159,122 +149,8 @@
       boutonLike.textContent = `❤️ J'aime (${count})`;
     });
 
-    function escapeHTML(s){
-      return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    }
-
-    function highlight(line) {
-      // simple token highlighting for visual effect
-      let out = escapeHTML(line)
-        .replace(/(Connexion|Chargement|Décryptage|Injection|Scan|Accès|Compilation|Observation|Analyse)/gi, '<span class="token-keyword">$1</span>')
-        .replace(/(Prénom:|Nom:|Âge:|Ville:|École:|Primaire:|Collège:|Lycée:|Sport:|Passe-temps:|Rêve:)/g, '<span class="token-keyword">$1</span>')
-        .replace(/(:\s*)(.+)$/g, function(_, a, b){ return a + '<span class="token-value">' + b + '</span>'; });
-      // highlight titles / game names
-      out = out.replace(/(Helldivers 2|Red Dead Redemption 2|Watch Dogs)/g, '<span class="token-title">$1</span>');
-      return '<span class="code-line">' + out + '</span>';
-    }
-
-    function randomInt(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    function randomHex(len) {
-      const chars = '0123456789ABCDEF';
-      let s = '';
-      for (let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)];
-      return s;
-    }
-
-    function randomBase64(len) {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-      let s = '';
-      for (let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)];
-      return s;
-    }
-
-    function generateGibberishLines(count) {
-      const lines = [];
-      for (let i=0;i<count;i++) {
-        const kind = randomInt(0,4);
-        if (kind === 0) {
-          lines.push('0x' + randomHex(randomInt(8,20)) + ' 0x' + randomHex(randomInt(8,20)));
-        } else if (kind === 1) {
-          lines.push(randomBase64(randomInt(24,48)));
-        } else if (kind === 2) {
-          lines.push('INIT->' + randomHex(6) + '::' + randomBase64(8) + ' // ' + randomHex(4));
-        } else if (kind === 3) {
-          lines.push('[' + randomHex(4) + ':' + randomInt(100,999) + '] ACCESS ' + (randomInt(0,1) === 1 ? 'GRANTED' : 'DENIED'));
-        } else {
-          lines.push('STREAM ' + randomHex(12) + '|' + randomBase64(12));
-        }
-      }
-      return lines;
-    }
-
-    function typeLines(lines) {
-      codeOutput.innerHTML = "";
-      const rendered = [];
-      let lineIndex = 0;
-      let charIndex = 0;
-
-      return new Promise((resolve) => {
-        const interval = setInterval(() => {
-          if (lineIndex >= lines.length) {
-            clearInterval(interval);
-            codeOutput.innerHTML = rendered.join('\n');
-            resolve();
-            return;
-          }
-
-          const line = lines[lineIndex];
-          if (charIndex <= line.length) {
-            const partial = escapeHTML(line.slice(0, charIndex));
-            const html = rendered.join('\n') + (rendered.length ? '\n' : '') + '<span class="code-line"><span class="typing">' + partial + '</span><span class="caret">█</span></span>';
-            codeOutput.innerHTML = html;
-            charIndex += 1;
-          } else {
-            if (line.startsWith('Récupération')) {
-              rendered.push(highlight(line));
-            } else {
-              rendered.push('<span class="code-line token-gibberish">' + escapeHTML(line) + '</span>');
-            }
-            charIndex = 0;
-            lineIndex += 1;
-          }
-        }, 10); // fast typing speed for a quick effect
-      });
-    }
-
-    function openHackerWindow(themeName, sectionBody) {
-      // during the cinematic "hack" we show fake, dramatic lines
-      const gibCount = randomInt(6, 11);
-      const gibberish = generateGibberishLines(gibCount);
-      const lines = gibberish.concat(["Récupération des données : OK"]);
-      hackerWindow.classList.add("visible");
-      hackerWindow.setAttribute("aria-hidden", "false");
-      codeOutput.textContent = "";
-      typeLines(lines).then(() => {
-        // only reveal the real content after the cinematic sequence completes
-        if (sectionBody) {
-          sectionBody.classList.remove("hidden");
-        }
-        setTimeout(() => closeHackerWindow(), 1000);
-      });
-    }
-
-    function closeHackerWindow() {
-      hackerWindow.classList.remove("visible");
-      hackerWindow.setAttribute("aria-hidden", "true");
-      codeOutput.textContent = "";
-    }
-
-    closeWindow.addEventListener("click", closeHackerWindow);
-    hackerWindow.querySelector(".hacker-window__backdrop").addEventListener("click", closeHackerWindow);
     document.addEventListener("keydown", (event) => {
       const key = event.key.toLowerCase();
-      if (key === "escape" && hackerWindow.classList.contains("visible")) {
-        closeHackerWindow();
-      }
       if (key === 'r') {
         document.getElementById('home-link').click();
       }
